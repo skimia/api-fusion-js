@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Skimia / Api Fusion JavaScripts</title>
+
+        <link rel="stylesheet" href="http://skimia.github.io/api-fusion-js/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://skimia.github.io/api-fusion-js/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://skimia.github.io/api-fusion-js/css/highlight.tomorrow-night.css">
+        <link rel="stylesheet" href="http://skimia.github.io/api-fusion-js/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://skimia.github.io/api-fusion-js/">
+                Skimia / Api Fusion JavaScripts
+                <small class="hidden-xs hidden-sm">
+                    The Javascript Api Client for Skimia Fusion
+                </small>
+            </a>
+
+                            <a href="https://github.com/skimia/api-fusion-js">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                                                    <p class="text-muted">
+                                Fusion Core
+                            </p>
+
+                            <ul class="nav nav-pills nav-stacked">
+                                                                    <li class="">
+                                        <a href="http://skimia.github.io/api-fusion-js/docs/fusion-core/getting-started.html">
+                                            Getting started
+                                        </a>
+                                    </li>
+                                                                    <li class="">
+                                        <a href="http://skimia.github.io/api-fusion-js/docs/fusion-core/event.html">
+                                            Event Service
+                                        </a>
+                                    </li>
+                                                                    <li class="">
+                                        <a href="http://skimia.github.io/api-fusion-js/docs/fusion-core/auth.html">
+                                            Auth Service
+                                        </a>
+                                    </li>
+                                                            </ul>
+                                                    <p class="text-muted">
+                                Other topics
+                            </p>
+
+                            <ul class="nav nav-pills nav-stacked">
+                                                            </ul>
+                        
+                    </nav>
+
+                
+                <section class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1 id="getting-started-with-fusion-core">Getting started with Fusion Core</h1>
+<ul>
+<li>Include <code>angular-fusion-core.js</code> (or <code>angular-fusion-core.min.js</code>) from the <a href="https://github.com/skimia/angular-fusion-core/tree/master/dist">dist</a> directory in your <code>index.html</code>,</li>
+<li>add <code>'fusion.core'</code> to your main module's list of dependencies</li>
+</ul>
+<p>When you're done, your setup should look similar to the following:</p>
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html ng-app="myApp"&gt;
+&lt;head&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+    ...
+    &lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.min.js"&gt;&lt;/script&gt;
+    &lt;script src="js/angular-fusion-core.min.js"&gt;&lt;/script&gt;
+    ...
+    &lt;script&gt;
+        var myApp = angular.module('myApp', ['fusion.core']);
+
+    &lt;/script&gt;
+    ...
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<h2 id="configuration">Configuration</h2>
+<h3 id="fusionconfig">fusionConfig</h3>
+<p>You must configure fusion for link the module to your fusion API</p>
+<pre><code class="language-js">myApp.config(function ($sfcConfigProvider) {
+  $sfcConfigProvider
+    .fusionConfig(
+            'http://localhost/skimia.dev/skimia-os2/public/skimia.api.svc', //full url to your API service
+            Skimia.Fusion.Core.Providers.FusionTree.unregistered_x, //configure your api tree (respect server configuration)
+            'skimia', //configure your api vendor (respect server configuration)
+            'v1' //configure your api version (respect server configuration)
+        );
+});</code></pre>
+<h3 id="setauthenticationmethod">setAuthenticationMethod</h3>
+<p>You must configure fusion authentication method according your server configuration</p>
+<p>applicables values: <code>http</code> or <code>jwt</code> according to http authentication method (cookie) or JSONWebTokens</p>
+<pre><code class="language-js">myApp.config(function ($sfcConfigProvider) {
+  $sfcConfigProvider
+    .setAuthenticationMethod('jwt');
+});</code></pre>
+<blockquote>
+<p>Note: to use jwt you must install the required module for this <a href="https://github.com/grevory/angular-local-storage">angular-local-storage</a></p>
+</blockquote>
+<h3 id="writedefaults">writeDefaults</h3>
+<p>Choose the network services updated to use directly the configuration of the api without making request by hands</p>
+<pre><code class="language-js">myApp.config(function ($sfcConfigProvider) {
+  $sfcConfigProvider
+    .writeDefaults(
+             Skimia.Fusion.Core.Providers.ConfigWritable.AngularHttp |
+             Skimia.Fusion.Core.Providers.ConfigWritable.AngularResource |
+             Skimia.Fusion.Core.Providers.ConfigWritable.AngularData
+         );
+});</code></pre>
+<h3 id="eventservice">EventService</h3>
+<p>if you wants to use the automatic error detection &amp; broadcast on network (more info in the Event doc section)</p>
+<pre><code class="language-js">myApp.config(function ($sfcEventProvider) {
+  $sfcEventProvider.injectDefaultsHandlers();
+});</code></pre>
+<h3 id="full-example">Full Example</h3>
+<pre><code class="language-js">myApp.config(function ($sfcConfigProvider, $sfcEventProvider) {
+  $sfcConfigProvider.fusionConfig(
+          'http://localhost/skimia.dev/skimia-os2/public/skimia.api.svc',
+          Skimia.Fusion.Core.Providers.FusionTree.unregistered_x,
+          'skimia',
+          'v1'
+      );
+  $sfcConfigProvider.setAuthenticationMethod('jwt');
+
+  $sfcConfigProvider.writeDefaults(
+          Skimia.Fusion.Core.Providers.ConfigWritable.AngularHttp |
+          Skimia.Fusion.Core.Providers.ConfigWritable.AngularResource |
+          Skimia.Fusion.Core.Providers.ConfigWritable.AngularData
+      );
+
+  $sfcEventProvider.injectDefaultsHandlers();
+
+});</code></pre>
+                </section>
+
+            </div>
+        </main>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>

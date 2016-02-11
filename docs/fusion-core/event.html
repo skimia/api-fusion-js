@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Skimia / Api Fusion JavaScripts</title>
+
+        <link rel="stylesheet" href="http://skimia.github.io/api-fusion-js/css/bootstrap.min.css">
+        <link rel="stylesheet" href="http://skimia.github.io/api-fusion-js/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://skimia.github.io/api-fusion-js/css/highlight.tomorrow-night.css">
+        <link rel="stylesheet" href="http://skimia.github.io/api-fusion-js/css/main.css">
+    </head>
+    <body>
+
+        <header class="navbar navbar-default navbar-fixed-top">
+
+            <a class="navbar-brand" href="http://skimia.github.io/api-fusion-js/">
+                Skimia / Api Fusion JavaScripts
+                <small class="hidden-xs hidden-sm">
+                    The Javascript Api Client for Skimia Fusion
+                </small>
+            </a>
+
+                            <a href="https://github.com/skimia/api-fusion-js">
+                    <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+                </a>
+            
+        </header>
+
+        <main class="container-fluid">
+            <div class="row">
+
+                
+                    <nav id="sidebar" class="col-sm-3 col-lg-2" role="navigation">
+
+                                                    <p class="text-muted">
+                                Fusion Core
+                            </p>
+
+                            <ul class="nav nav-pills nav-stacked">
+                                                                    <li class="">
+                                        <a href="http://skimia.github.io/api-fusion-js/docs/fusion-core/getting-started.html">
+                                            Getting started
+                                        </a>
+                                    </li>
+                                                                    <li class="">
+                                        <a href="http://skimia.github.io/api-fusion-js/docs/fusion-core/event.html">
+                                            Event Service
+                                        </a>
+                                    </li>
+                                                                    <li class="">
+                                        <a href="http://skimia.github.io/api-fusion-js/docs/fusion-core/auth.html">
+                                            Auth Service
+                                        </a>
+                                    </li>
+                                                            </ul>
+                                                    <p class="text-muted">
+                                Other topics
+                            </p>
+
+                            <ul class="nav nav-pills nav-stacked">
+                                                            </ul>
+                        
+                    </nav>
+
+                
+                <section class="col-sm-offset-3 col-lg-offset-2 col-sm-9 col-lg-10">
+                    <h1 id="http-event-interceptor">HTTP Event interceptor</h1>
+<p>l'intercepteur d'events est basé sur le même modèle qu'<a href="https://github.com/witoldsz/angular-http-auth">angular-http-auth</a></p>
+<p>Il permet d'handle des codes d'erreur http et les &quot;broadcast&quot; sur la <code>$rootScope</code></p>
+<p>Http events handlers:</p>
+<pre><code class="language-js">var handlers = [
+                { 
+                    //code http 
+                    code: 401, 
+                    buffered:true, //event type buffered
+                    ignore:'ignoreUnauthorized',//config ignore handler
+                    events:[
+                        'sfc:unauthorized','sfc:auth:loginRequired'
+                    ],
+                    retries_events:[
+                        'sfc:unauthorized-retried','sfc:auth:loginConfirmed'
+                    ],
+                    rejects_events:[
+                        'sfc:unauthorized-rejected','sfc:auth:loginCancelled'
+                    ]
+                },
+                { 
+                    code: 403, 
+                    buffered:false,
+                    ignore:'ignoreForbidden',
+                    events:[
+                        'sfc:forbidden','sfc:auth:forbidden'
+                    ]
+                }
+
+            ];</code></pre>
+<h2 id="utilisation-classique">Utilisation classique</h2>
+<h3 id="type-devent">Type d'event <code>buffered:true</code></h3>
+<pre><code class="language-js">//appel serveur pouvant échouer (manque d'authentification)
+$http(...).then(function(response) { do-something-with-response });</code></pre>
+<p>lorsque qu'une réponse serveur porte le code d'un handler buffered il capture la requette et broadcast les events</p>
+<p>Exemple pour le code 401:</p>
+<pre><code>[
+    'sfc:unauthorized',
+    'sfc:auth:loginRequired'
+]</code></pre>
+<p>dans ce cas précis l'application doit intercepter ce ou ces events pour afficher un formulaire de connexion</p>
+<p>lorsque que l'application determine que l'authentification est OK broadcast un des <code>retries_events</code> exemple : <code>sfc:auth:loginConfirmed</code></p>
+<p>la requette initiale est réessayée et lorsque une reponse correcte est finalement retournée le <code>function(response) { do-something-with-response }</code> est executé</p>
+<p>lorsque l'authentification n'est pas possible (plusieurs essais infructueux par exemple) nous pouvons broadcast un des <code>rejects_events</code> exemple : <code>sfc:auth:loginCancelled</code> afin de rejeter toute les requettes en attente</p>
+<h3 id="type-devent-1">Type d'event <code>buffered:false</code></h3>
+<p>identique dans le fonctionnement que les events <code>buffered:true</code> sauf que il est impossible de réessayer les requettes échouées il permet uniquement de pouvoir transmettre un event lorsque qu'un requette échoue</p>
+                </section>
+
+            </div>
+        </main>
+
+        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="http://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+
+        <script>
+            $(function() {
+                $("section>h1").wrap('<div class="page-header" />');
+                // Syntax highlighting
+                hljs.initHighlightingOnLoad();
+            });
+        </script>
+
+    </body>
+</html>
