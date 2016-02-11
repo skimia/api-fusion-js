@@ -1,7 +1,7 @@
 {
   "name": "api-fusion",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.1.2",
+  "description": "The javascript Client to connect to the fusion api",
   "main": "dist/js/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

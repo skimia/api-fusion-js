@@ -12,7 +12,7 @@ var sassConfig = {
 $gulp.task('ts', function() {
     return $gulp.src('src/ts/**/*.ts')
         .pipe($ts({
-            out: 'app.js',
+            out: 'fusion.core.js',
             target: 'ES5'
         }))
         .pipe($gulp.dest('dist/js'));
@@ -22,7 +22,7 @@ $gulp.task('tst', function() {
         .pipe($template({
             root: '/ts',
             moduleName: 'jstack',
-            output: 'app-templates.js',
+            output: 'fusion.core.templates.js',
             strip: __dirname +'/ts/'
         }))
         .pipe($gulp.dest('dist/js'));

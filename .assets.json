@@ -1,0 +1,32 @@
+{
+  "name": "fusion-client",
+  "collections": {
+    "jquery": [
+      "vendors/jquery.js"
+    ],
+    "angularjs": [
+      "jquery",
+      "node_modules/angular/angular.js"
+    ],
+    "js-data": [
+      "node_modules/js-data/dist/js-data.js"
+    ],
+    "js-data-angular": [
+      "js-data",
+      "node_modules/js-data-angular/dist/js-data-angular.js"
+    ],
+    "angular-local-storage": [
+      "vendors/angular-local-storage.js"
+    ],
+    "fusion-client": [
+      "angularjs",
+      "js-data-angular",
+      "angular-local-storage",
+      "dist/css/apifusion.css",
+      "dist/js/fusion.core.js",
+      "dist/js/fusion.core.templates.js"
+    ]
+  },
+  "alias": "fusion-client",
+  "description":"The javascript Client to connect to the fusion api"
+}
