@@ -1,0 +1,37 @@
+template:
+    url: https://github.com/skimia/Template-Dark
+
+exclude:
+    - src
+    - tests
+    - vendor
+    - gh-pages
+    - node_modules
+
+baseUrl: http://skimia.github.io/api-fusion-js
+
+github:
+    user: skimia
+    repo: api-fusion-js
+
+title: Skimia / Api Fusion JavaScripts
+subTitle: The Javascript Api Client for Skimia Fusion
+
+
+menu:
+    sections:
+        fusion-core:
+            name: Fusion Core
+            items:
+                getting-started:
+                    text: Getting started
+                    relativeUrl: docs/fusion-core/getting-started.html
+                event:
+                    text: Event Service
+                    relativeUrl: docs/fusion-core/event.html
+                auth:
+                    text: Auth Service
+                    relativeUrl: docs/fusion-core/auth.html
+        other:
+            name: Other topics
+            items:
